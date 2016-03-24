@@ -224,9 +224,14 @@ public class Database {
             ps.setString(1, selectedCookieType);
             ps.executeUpdate();
 
+            String updateIngredients = "update INGREDIENTS SET storedAmount = storedAmount - amount where " +
+                    "ingredientName in (select ingredientName, storedAmount from Cookies natural join CookiesIngredients " +
+                    "where cookieName = ?);";
 
+            //PreparedStatement ps1 = conn.prepareStatement(updateIngredients);
+            //ps1.setString(1, selectedCookieType);
+            //ps1.executeQuery();
 
-            String updateIngredients = "update INGREDIENTS SET storedAmount = storedAmount - ? where
         } catch (SQLException e) {
             System.err.println(e);
             e.printStackTrace();

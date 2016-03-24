@@ -40,8 +40,8 @@ create table UNITS(
 
 create table INGREDIENTS(
 	ingredientName	varchar(55) not NULL,
-	unit 			varchar(55) not NULL,
-	storedAmount	int not NULL default 0,
+	unit 					varchar(55) not NULL,
+	storedAmount	double not NULL default 100000,
 	primary key 	(ingredientName),
 	foreign key		(unit) references UNITS(unit)
 );
@@ -49,14 +49,14 @@ create table INGREDIENTS(
 create table COOKIES_INGREDIENTS(
 	cookieName 		varchar(55) not NULL,
 	ingredientName	varchar(55) not NULL,
-	amount 			int not NULL default 0,
+	amount 				double not NULL default 0,
 	primary key		(cookieName, ingredientName),
 	foreign key		(cookieName) references COOKIES(cookieName),
 	foreign key		(ingredientName) references INGREDIENTS(ingredientName)
 );
 
 create table ORDERS_COOKIES(
-	orderId 		int not NULL,
+	orderId 			int not NULL,
 	cookieName		varchar(55) not NULL,
 	nbrPallets 		int not NULL default 0,
 	primary key		(orderId, cookieName),
@@ -67,3 +67,68 @@ create table ORDERS_COOKIES(
 
 insert into COOKIES (cookieName) values ('Nut ring'), ('Nut cookie'), ('Amneris'), ('Tango'), ('Almond delight'), ('Berliner');
 
+insert into UNITS (unit) values ('g'), ('dl');
+
+insert into INGREDIENTS (ingredientName, unit) values
+('Flour', 'g'),
+('Butter', 'g'),
+('Icing sugar', 'g'),
+('Roasted, chopped nuts', 'g'),
+('Fine-ground nuts', 'g'),
+('Bread crumbs', 'g'),
+('Sugar', 'g'),
+('Egg whites', 'dl'),
+('Chocolate', 'g'),
+('Potato starch', 'g'),
+('Wheat flour', 'g'),
+('Sodium bicarbonate', 'g'),
+('Vanilla', 'g'),
+('Chopped almonds', 'g'),
+('Cinnamon', 'g'),
+('Marzipan', 'g'),
+('Ground, roasted nuts', 'g'),
+('Vanilla sugar', 'g'),
+('Eggs', 'g');
+
+insert into COOKIES_INGREDIENTS (cookieName, ingredientName, amount) values
+('Nut ring', 'Flour', 450),
+('Nut ring', 'Butter', 450),
+('Nut ring', 'Icing sugar', 190),
+('Nut ring', 'Roasted, chopped nuts', 225),
+
+('Nut cookie', 'Fine-ground nuts', 750),
+('Nut cookie', 'Ground, roasted nuts', 625),
+('Nut cookie', 'Bread crumbs', 125),
+('Nut cookie', 'Sugar', 375),
+('Nut cookie', 'Egg whites', 3.5),
+('Nut ring', 'Chocolate', 50),
+
+('Amneris', 'Marzipan', 750),
+('Amneris', 'Butter', 250),
+('Amneris', 'Eggs', 250),
+('Amneris', 'Potato starch', 25),
+('Amneris', 'Wheat flour', 25),
+
+('Tango', 'Butter', 200),
+('Tango', 'Sugar', 250),
+('Tango', 'Flour', 300),
+('Tango', 'Sodium bicarbonate', 4),
+('Tango', 'Vanilla', 2),
+
+('Almond delight', 'Butter', 400),
+('Almond delight', 'Sugar', 270),
+('Almond delight', 'Chopped almonds', 279),
+('Almond delight', 'Flour', 400),
+('Almond delight', 'Cinnamon', 10),
+
+('Berliner', 'Flour', 350),
+('Berliner', 'Butter', 250),
+('Berliner', 'Icing sugar', 100),
+('Berliner', 'Eggs', 50),
+('Berliner', 'Vanilla sugar', 5),
+('Berliner', 'Chocolate', 50);
+
+insert into CUSTOMERS (customerName, address) values ('Finkakor AB', 'Helsingborg');
+
+insert into Orders (orderId, customerName, deliveryDate) values (-1, '')
+insert into Pallets (cookieName, orderId) values ('Almond delight', NULL);
