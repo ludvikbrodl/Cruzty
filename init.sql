@@ -23,7 +23,7 @@ create table COOKIES(
 
 create table PALLETS(
 	palletId		int AUTO_INCREMENT,
-	orderId			int default -1,
+	orderId			int default NULL,
 	cookieName		varchar(55) not NULL,
 	isBlocked 		boolean not NULL default 0,
 	productionDate	DATETIME default NOW(),
@@ -128,7 +128,17 @@ insert into COOKIES_INGREDIENTS (cookieName, ingredientName, amount) values
 ('Berliner', 'Vanilla sugar', 5),
 ('Berliner', 'Chocolate', 50);
 
+
 insert into CUSTOMERS (customerName, address) values ('Finkakor AB', 'Helsingborg');
 
-insert into Orders (orderId, customerName, deliveryDate) values (-1, '')
+# insert into Orders (orderId, customerName, deliveryDate) values (-1, '');
 insert into Pallets (cookieName, orderId) values ('Almond delight', NULL);
+
+/*
+update INGREDIENTS SET storedAmount = storedAmount -
+	(select amount from COOKIES_INGREDIENTS where cookieName = 'Almond delight'
+		AND COOKIES_INGREDIENTS.ingredientName = INGREDIENTS.ingredientName)
+	where ingredientName in
+		(select ingredientName from Cookies natural join COOKIES_INGREDIENTS
+ 			where cookieName = 'Almond delight');
+ 		*/

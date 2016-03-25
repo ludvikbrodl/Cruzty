@@ -219,18 +219,23 @@ public class Database {
 
     public void createPallet(String selectedCookieType) {
         try {
-            String sql = "insert into Pallets (cookieName) values (?)";
+            String sql = "insert into Pallets (cookieName, orderId) values (?, NULL)";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, selectedCookieType);
             ps.executeUpdate();
 
-            String updateIngredients = "update INGREDIENTS SET storedAmount = storedAmount - amount where " +
-                    "ingredientName in (select ingredientName, storedAmount from Cookies natural join CookiesIngredients " +
-                    "where cookieName = ?);";
+            String updateIngredients =
+                    "update INGREDIENTS SET storedAmount = storedAmount - " +
+                        "(select amount from COOKIES_INGREDIENTS where cookieName = ?" +
+                            "AND COOKIES_INGREDIENTS.ingredientName = INGREDIENTS.ingredientName)" +
+                        "where ingredientName in" +
+                            "(select ingredientName from Cookies natural join COOKIES_INGREDIENTS where cookieName = ?)";
 
-            //PreparedStatement ps1 = conn.prepareStatement(updateIngredients);
-            //ps1.setString(1, selectedCookieType);
-            //ps1.executeQuery();
+            PreparedStatement ps1 = conn.prepareStatement(updateIngredients);
+            ps1.setString(1, selectedCookieType);
+            ps1.setString(2, selectedCookieType);
+
+            System.out.println(ps1.executeUpdate());
 
         } catch (SQLException e) {
             System.err.println(e);
@@ -249,15 +254,44 @@ public class Database {
     }
 
     public Pallet getPallet(String idOfPallet) {
-        return new Pallet("id", "HERP", true, "DERP");
+        Pallet p = new Pallet();
+        try {
+            String sql = "select * from PALLETS where palletId = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, Integer.parseInt(idOfPallet));
+            ResultSet rs = stmt.executeQuery();
+
+            while(rs.next()){
+                p.id = rs.getString("palletId");
+                p.orderId = rs.getString("orderId");
+                p.isBlocked = rs.getBoolean("isBlocked");
+                p.prodDate = rs.getString("productionDate");
+                p.cookieName = rs.getString("cookieName");
+            }
+
+        } catch (SQLException e) {
+            System.err.println(e);
+            e.printStackTrace();
+        }
+        return p;
     }
 
     public List<String> getAllPalletIds() {
-        ArrayList<String> list = new ArrayList<>();
-        list.add("1");
-        list.add("22");
-        list.add("69");
-        return list;
+        ArrayList<String> ids = new ArrayList<>();
+        try {
+            String sql = "select palletId from PALLETS";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+
+            while(rs.next()){
+                ids.add(rs.getString("palletId"));
+            }
+
+        } catch (SQLException e) {
+            System.err.println(e);
+            e.printStackTrace();
+        }
+        return ids;
     }
 
     public void blockPallet(String palletId) {
