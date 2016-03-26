@@ -7,10 +7,10 @@
 <top>
 	<TabPane tabClosingPolicy="UNAVAILABLE">
     <tabs>
-        <Tab text="Login">
+        <Tab text="Create Pallet">
                 <fx:include fx:id="aLoginTab" source="loginTab.fxml"/>
         </Tab>
-        <Tab text="Book">
+        <Tab text="View Pallets">
                 <fx:include fx:id="aBookingTab" source="bookingTab.fxml"/>
         </Tab>
     </tabs>
