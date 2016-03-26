@@ -214,19 +214,33 @@ public class Database {
 
     public void createPallet(String selectedCookieType, String orderId) {
         try {
-            PreparedStatement ps;
+            PreparedStatement ps1;
             if (orderId == null) {
                 String sql = "insert into Pallets (cookieName, orderId) values (?, NULL)";
-                ps = conn.prepareStatement(sql);
-                ps.setString(1, selectedCookieType);
+                ps1 = conn.prepareStatement(sql);
+                ps1.setString(1, selectedCookieType);
             } else {
                 String sql = "insert into Pallets (cookieName, orderId) values (?, ?)";
-                ps = conn.prepareStatement(sql);
-                ps.setString(1, selectedCookieType);
-                ps.setString(2, orderId);
+                ps1 = conn.prepareStatement(sql);
+                ps1.setString(1, selectedCookieType);
+                ps1.setString(2, orderId);
             }
 
-            ps.executeUpdate();
+            ps1.executeUpdate();
+
+
+            String updateIngredients =
+                    "update INGREDIENTS SET storedAmount = storedAmount - " +
+                            "(select amount from COOKIES_INGREDIENTS where cookieName = ?" +
+                            "AND COOKIES_INGREDIENTS.ingredientName = INGREDIENTS.ingredientName)" +
+                            "where ingredientName in" +
+                            "(select ingredientName from Cookies natural join COOKIES_INGREDIENTS where cookieName = ?)";
+
+            ps1 = conn.prepareStatement(updateIngredients);
+            ps1.setString(1, selectedCookieType);
+            ps1.setString(2, selectedCookieType);
+
+            System.out.println(ps1.executeUpdate());
 
         } catch (SQLException e) {
             System.err.println(e);
@@ -305,9 +319,9 @@ public class Database {
                 sql = "select palletId, isBlocked from PALLETS where productionDate BETWEEN '" + fromDate + "' AND '" + toDate + "'";
             }
 
-            if(cookieName != null && fromDate == null && toDate == null){
+            if (cookieName != null && fromDate == null && toDate == null) {
                 sql += " WHERE cookieName = '" + cookieName + "'";
-            } else if(cookieName != null){
+            } else if (cookieName != null) {
                 sql += " AND cookieName = '" + cookieName + "'";
             }
             System.out.println(sql);
