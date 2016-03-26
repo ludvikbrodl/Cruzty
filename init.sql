@@ -28,6 +28,7 @@ create table PALLETS(
 	isBlocked 		boolean not NULL default 0,
 	productionDate	DATETIME default NOW(),
 	location		enum('storage', 'customer') not NULL default 'storage',
+	deliveryDate	DATETIME default '0000-00-00 00:00:00',
 	primary key		(palletId),
 	foreign key		(orderId) references ORDERS(orderId),
 	foreign key		(cookieName) references COOKIES(cookieName)
@@ -131,8 +132,12 @@ insert into COOKIES_INGREDIENTS (cookieName, ingredientName, amount) values
 
 insert into CUSTOMERS (customerName, address) values ('Finkakor AB', 'Helsingborg');
 
-# insert into Orders (orderId, customerName, deliveryDate) values (-1, '');
-insert into Pallets (cookieName, orderId) values ('Almond delight', NULL);
+insert into ORDERS (customerName) values ('Finkakor AB');
+insert into ORDERS_COOKIES (orderId, cookieName, nbrPallets) VALUES(1, 'Almond delight', 1);
+insert into ORDERS_COOKIES (orderId, cookieName, nbrPallets) VALUES(1, 'Berliner', 1);
+
+insert into Pallets (cookieName, orderId) values ('Almond delight', 1);
+
 
 /*
 update INGREDIENTS SET storedAmount = storedAmount -

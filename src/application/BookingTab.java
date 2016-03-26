@@ -1,22 +1,17 @@
 package application;
 
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
 
 import java.util.List;
 
 
 public class BookingTab {
-
-
-    // table references
     @FXML
     private ListView<String> palletList;
 
-    // show info references
     @FXML
     private Label palletId;
     @FXML
@@ -25,16 +20,32 @@ public class BookingTab {
     private Label isBlocked;
     @FXML
     private Label productionDate;
+    @FXML
+    private Label cookieTypeLabel;
+    @FXML
+    private Label locatiolabel;
+    @FXML
+    private Label deliveryDateLabel;
+    @FXML
+    private Label customerLabel;
+
 
     @FXML
     private Button blockButton;
+
+    @FXML
+    private TextField filterFromDate;
+    @FXML
+    private TextField filterToDate;
+    @FXML
+    private CheckBox filterBlocked;
+    @FXML
+    private ComboBox<String> cookieTypes;
 
 
     private Database db = Database.getInstance();
 
     public void initialize() {
-        System.out.println("Initializing BookingTab");
-
 
         // set up listeners for the movie list selection
         palletList.getSelectionModel().selectedItemProperty().addListener(
@@ -51,13 +62,39 @@ public class BookingTab {
                     db.blockPallet(palletId);
                     fillPalletInfo(palletId);
                 });
-        fillPalletList();
+        fillPalletList(false);
+        cookieTypes.setItems(FXCollections.observableArrayList(db.getCookieTypes()));
+
     }
 
 
-    private void fillPalletList() {
-        List<String> palletsIds = db.getAllPalletIds();
+    @FXML
+    protected void applyFilterAction(ActionEvent event) {
+        fillPalletList(true);
+    }
 
+    private void fillPalletList(boolean applyFilter) {
+        List<String> palletsIds;
+
+        if (!applyFilter) {
+            palletsIds = db.getAllPalletIds();
+        } else {
+            String from = filterFromDate.getText();
+            String to = filterToDate.getText();
+            String cookieName;
+            if (from.equals("")) {
+                from = null;
+            }
+            if (to.equals("")) {
+                to = null;
+            }
+            if(!cookieTypes.getSelectionModel().isEmpty()){
+                cookieName = cookieTypes.getSelectionModel().getSelectedItem();
+            } else {
+                cookieName = null;
+            }
+            palletsIds = db.getFilteredPalletIds(from, to, filterBlocked.isSelected(), cookieName);
+        }
         palletList.setItems(FXCollections.observableList(palletsIds));
         // remove any selection
         palletList.getSelectionModel().clearSelection();
@@ -71,6 +108,10 @@ public class BookingTab {
             orderId.setText("");
             isBlocked.setText("");
             productionDate.setText("");
+            cookieTypeLabel.setText("");
+            customerLabel.setText("");
+            deliveryDateLabel.setText("");
+            locatiolabel.setText("");
             return;
         }
         Pallet p = db.getPallet(idOfPallet);
@@ -78,10 +119,15 @@ public class BookingTab {
         orderId.setText(p.orderId);
         isBlocked.setText(p.isBlocked + "");
         productionDate.setText(p.prodDate);
+        cookieTypeLabel.setText(p.cookieName);
+        customerLabel.setText(p.customer);
+        deliveryDateLabel.setText(p.deliveryDate);
+        locatiolabel.setText(p.location);
+
     }
 
     public void palletCreated() {
-        fillPalletList();
+        fillPalletList(false);
     }
 
 }

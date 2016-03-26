@@ -9,13 +9,9 @@ public class Pallet {
     public boolean isBlocked;
     public String prodDate;
     public String cookieName;
-
-    public Pallet(String id, String orderId, boolean isBlocked, String prodDate){
-        this.id = id;
-        this.orderId = orderId;
-        this.isBlocked = isBlocked;
-        this.prodDate = prodDate;
-    }
+    public String deliveryDate;
+    public String location;
+    public String customer;
 
     public Pallet(){
 
