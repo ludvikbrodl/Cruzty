@@ -8,7 +8,7 @@ import javafx.scene.control.*;
 import java.util.List;
 
 
-public class BookingTab {
+public class ViewPallets {
     @FXML
     private ListView<String> palletList;
 

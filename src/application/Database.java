@@ -91,106 +91,6 @@ public class Database {
     }
 
 
-    public ArrayList<String> movieDates(String movieName) {
-        try {
-            String sql = "select performanceDate from Performance where Performance.movieName = ? order by performanceDate";
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, movieName);
-            ResultSet result = ps.executeQuery();
-            ArrayList<String> movieDates = new ArrayList<>();
-            while (result.next()) {
-                movieDates.add(result.getString("performanceDate"));
-            }
-            return movieDates;
-        } catch (SQLException e) {
-            System.err.println(e);
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
-    }
-
-    public ArrayList<String> movieTitles() {
-        try {
-            String sql = "select * from Movies order by movieName";
-            PreparedStatement ps1 = conn.prepareStatement(sql);
-            ResultSet result = ps1.executeQuery();
-            ArrayList<String> movieList = new ArrayList<>();
-            while (result.next()) {
-                movieList.add(result.getString("movieName"));
-            }
-            return movieList;
-        } catch (SQLException e) {
-            System.err.println(e);
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
-    }
-
-
-    public Show getShowData(String mTitle, String mDate) {
-        //Integer mFreeSeats = 42;
-        //String mVenue = "Kino 2";
-        try {
-            String sql = "select * from Performance where Performance.movieName = ? and Performance.performanceDate = ? order by performanceDate";
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, mTitle);
-            ps.setString(2, mDate);
-            ResultSet result = ps.executeQuery();
-            result.next();
-            return new Show(result.getString("movieName"), result.getString("performanceDate"), result.getString("theaterName"), result.getInt("remainingSeats"));
-        } catch (SQLException e) {
-            System.err.println(e);
-            e.printStackTrace();
-            return new Show();
-        }
-
-    }
-
-    public int bookTicket(String movie, String date, String uname) {
-        int resultcode = -1;
-        try {
-            conn.setAutoCommit(false);
-            String check = "select remainingSeats from Performance where Performance.movieName = ? and Performance.performanceDate = ? for update;";
-            PreparedStatement ch = conn.prepareStatement(check);
-            ch.setString(1, movie);
-            ch.setString(2, date);
-            ResultSet seatCheck = ch.executeQuery();
-            if (seatCheck.next() && seatCheck.getInt("remainingSeats") == 0) {
-                conn.rollback();
-            } else {
-
-
-                String updateSql = "update Performance set remainingSeats = remainingSeats - 1 where Performance.movieName = ? and Performance.performanceDate = ?;";
-                PreparedStatement up = conn.prepareStatement(updateSql); // updates remainingSeats
-
-                up.setString(1, movie);
-                up.setString(2, date);
-                up.executeUpdate();
-
-                String sql = "INSERT INTO Ticket (userName,performanceDate,movieName) VALUES (?, ?, ?);";
-                PreparedStatement ps = conn.prepareStatement(sql);
-
-                ps.setString(1, uname);
-                ps.setString(2, date);
-                ps.setString(3, movie);
-                ps.executeUpdate();
-
-                // ResultSet id = conn.prepareStatement("SELECT SCOPE_IDENTITY();").executeQuery();
-                resultcode = 0;
-            }
-        } catch (SQLException e) {
-            System.err.println(e);
-            e.printStackTrace();
-        } finally {
-            try {
-                conn.commit();
-                conn.setAutoCommit(true);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            return resultcode;
-        }
-    }
 
     public ArrayList<String> getCookieTypes() {
         ArrayList<String> cookieTypes = new ArrayList<>();
@@ -247,7 +147,6 @@ public class Database {
             e.printStackTrace();
         }
 
-        //TODO
     }
 
 

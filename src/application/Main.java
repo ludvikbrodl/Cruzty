@@ -17,7 +17,7 @@ public class Main extends Application {
             Parent root = loader.load();
 
             Scene scene = new Scene(root, 700, 550);
-            scene.getStylesheets().add(getClass().getResource("login.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("create.css").toExternalForm());
             //			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
             // obtain main controller

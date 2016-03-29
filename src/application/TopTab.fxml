@@ -8,10 +8,10 @@
 	<TabPane tabClosingPolicy="UNAVAILABLE">
     <tabs>
         <Tab text="Create Pallet">
-                <fx:include fx:id="aLoginTab" source="loginTab.fxml"/>
+                <fx:include fx:id="aLoginTab" source="createPalletTab.fxml"/>
         </Tab>
         <Tab text="View Pallets">
-                <fx:include fx:id="aBookingTab" source="bookingTab.fxml"/>
+                <fx:include fx:id="aBookingTab" source="viewTabPallet.fxml"/>
         </Tab>
     </tabs>
     </TabPane>

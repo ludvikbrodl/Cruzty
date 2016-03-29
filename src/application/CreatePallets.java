@@ -8,10 +8,9 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.text.Text;
 
 
-public class LoginTab {
+public class CreatePallets {
     @FXML
     private ComboBox<String> cookieTypesBox;
     @FXML
@@ -28,7 +27,7 @@ public class LoginTab {
 
 
 
-    private BookingTab bookingTabCtrl;
+    private ViewPallets viewTabCtrl;
     private Database db = Database.getInstance();
 
 
@@ -68,7 +67,7 @@ public class LoginTab {
                 orderCustomerComboBox.getSelectionModel().clearSelection();
             }
             db.createPallet(selectedCookieType, orderId);
-            bookingTabCtrl.palletCreated();
+            viewTabCtrl.palletCreated();
         }
 
     }
@@ -91,9 +90,8 @@ public class LoginTab {
 
     // helpers
     // use this pattern to send data down to controllers at initialization
-    public void setBookingTab(BookingTab bookingTabCtrl) {
-        System.out.println("LoginTab sets bookingTab:" + bookingTabCtrl);
-        this.bookingTabCtrl = bookingTabCtrl;
+    public void setViewTab(ViewPallets viewTabCtrl) {
+        this.viewTabCtrl = viewTabCtrl;
 
     }
 }
