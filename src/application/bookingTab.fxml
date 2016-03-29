@@ -1,17 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.text.*?>
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
+
 
 <SplitPane dividerPositions="0.32951289398280803" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" styleClass="root" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.BookingTab">
   <items>
@@ -57,8 +49,8 @@
                   <Label fx:id="customerLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                </children>
             </GridPane>
-            <TextField fx:id="filterFromDate" layoutX="5.0" layoutY="320.0" />
-            <TextField fx:id="filterToDate" layoutX="178.0" layoutY="320.0" />
+            <TextField fx:id="filterFromDate" promptText="From date (YYYY-MM-DD)" layoutX="5.0" layoutY="320.0" />
+            <TextField fx:id="filterToDate" promptText="To date (YYYY-MM-DD)" layoutX="178.0" layoutY="320.0" />
             <CheckBox fx:id="filterBlocked" layoutX="5.0" layoutY="355.0" mnemonicParsing="false" text="Only blocked" />
             <Label layoutX="5.0" layoutY="304.0" text="From date" />
             <Label layoutX="177.0" layoutY="304.0" text="To date" />
